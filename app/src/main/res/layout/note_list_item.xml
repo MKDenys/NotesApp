@@ -9,7 +9,9 @@
         android:id="@+id/textView_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="90dp" />
 
@@ -17,7 +19,9 @@
         android:id="@+id/textView_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/textView_title"
         tools:layout_editor_absoluteX="153dp" />
 
@@ -25,6 +29,7 @@
         android:id="@+id/textView_datetime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/textView_description"
         tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

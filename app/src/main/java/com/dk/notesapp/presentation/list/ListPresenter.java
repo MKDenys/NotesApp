@@ -34,7 +34,7 @@ class ListPresenter extends BasePresenter implements InternetStatusChangeObserve
     public void internetStatusWasUpdate(boolean connectionStatus) {
         if (connectionStatus) {
             view.showLoadingStage();
-            //notesSynchronizer.startSync();
+            notesSynchronizer.startSync();
         } else {
             view.showErrorMessage(R.string.no_connection_error);
         }
@@ -55,5 +55,17 @@ class ListPresenter extends BasePresenter implements InternetStatusChangeObserve
         } else {
             view.showNoteList(notes);
         }
+    }
+
+    public void deleteNote(Note note){
+        dataProvider.deleteNote(note);
+    }
+
+    public void addNewNote(){
+        dataProvider.addNewNote();
+    }
+
+    public void noteSelected(Note note){
+        view.showNoteDetail(note);
     }
 }

@@ -1,7 +1,8 @@
-package com.dk.notesapp.database;
+package com.dk.notesapp.database.async;
 
 import android.os.AsyncTask;
 
+import com.dk.notesapp.database.NoteDao;
 import com.dk.notesapp.model.Note;
 
 public class DeleteNoteAsyncTask extends AsyncTask<Note, Void, Void> {

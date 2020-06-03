@@ -5,24 +5,26 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.dk.notesapp.R;
 import com.dk.notesapp.database.DateConverter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @TypeConverters(DateConverter.class)
-public class Note {
+public class Note implements Serializable {
     @PrimaryKey
     @NonNull
     private String id;
     private String title;
     private String description;
     private Date lastUpdateDate;
+    private static final String DEFAULT_TITLE = "Новая заметка";
 
     public Note() {
         id = String.valueOf(System.currentTimeMillis());
-        title = String.valueOf(R.string.new_note_title);
+        title = DEFAULT_TITLE;
+        description = "";
         lastUpdateDate = new Date(System.currentTimeMillis());
     }
 

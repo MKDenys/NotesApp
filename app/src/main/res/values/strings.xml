@@ -2,5 +2,5 @@
     <string name="app_name">NotesApp</string>
     <string name="no_data_error">Нет данных</string>
     <string name="no_connection_error">Нет интернета</string>
-    <string name="new_note_title">Новая заметка</string>
+    <string name="put_serializable_key">note</string>
 </resources>

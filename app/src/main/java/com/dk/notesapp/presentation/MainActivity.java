@@ -61,6 +61,16 @@ public class MainActivity extends AppCompatActivity implements DataProvider, Not
     }
 
     @Override
+    public void deleteNote(Note note) {
+        localRepository.delete(note);
+    }
+
+    @Override
+    public void addNewNote() {
+        localRepository.insertOrUpdate(new Note());
+    }
+
+    @Override
     public void registerObserver(DataProviderObserver observer) {
         observers.add(observer);
     }

@@ -9,4 +9,5 @@ interface ListView extends BaseView {
     void showLoadingStage();
     void showErrorMessage(int errorMessage);
     void showNoteList(List<Note> notes);
+    void showNoteDetail(Note note);
 }

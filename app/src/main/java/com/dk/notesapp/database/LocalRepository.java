@@ -2,6 +2,8 @@ package com.dk.notesapp.database;
 
 import androidx.lifecycle.LiveData;
 
+import com.dk.notesapp.database.async.DeleteNoteAsyncTask;
+import com.dk.notesapp.database.async.InsertOrUpdateAsyncTask;
 import com.dk.notesapp.model.Note;
 import com.dk.notesapp.utils.App;
 
@@ -22,6 +24,10 @@ public class LocalRepository {
         for (Note note: notes) {
             new InsertOrUpdateAsyncTask(noteDao).execute(note);
         }
+    }
+
+    public void insertOrUpdate(Note note) {
+        new InsertOrUpdateAsyncTask(noteDao).execute(note);
     }
 
     public void delete(Note note){
