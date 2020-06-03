@@ -1,5 +1,6 @@
 package com.dk.notesapp.utils.InternetStatusChecker;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +16,7 @@ public class InternetStatusChangeReceiver extends BroadcastReceiver implements I
     private List<InternetStatusChangeObserver> observers;
     private boolean internetConnectionStatus;
 
-    private InternetStatusChangeReceiver(){
+    InternetStatusChangeReceiver(){
         observers = new LinkedList<>();
     }
 

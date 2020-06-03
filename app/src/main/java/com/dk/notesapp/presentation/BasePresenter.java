@@ -4,7 +4,7 @@ public class BasePresenter {
     protected BaseView view;
 
     public BasePresenter (BaseView view) {
-        this.view = view;
+        attach(view);
     }
 
     public void attach(BaseView view) {

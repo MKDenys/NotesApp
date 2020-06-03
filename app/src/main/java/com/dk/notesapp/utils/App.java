@@ -5,8 +5,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import androidx.room.Room;
+
+import com.dk.notesapp.database.AppDatabase;
+
 public class App extends Application {
     private static App instance;
+    private AppDatabase appDatabase;
 
     public static App getInstance() {
         return instance;
@@ -16,6 +21,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        appDatabase = Room.databaseBuilder(this, AppDatabase.class, "database")
+                .build();
     }
 
     public boolean isInternetAvailable(){
@@ -24,5 +31,9 @@ public class App extends Application {
         assert cm != null;
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public AppDatabase getAppDatabase() {
+        return appDatabase;
     }
 }
