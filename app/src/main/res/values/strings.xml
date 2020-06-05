@@ -3,4 +3,6 @@
     <string name="no_data_error">Нет данных</string>
     <string name="no_connection_error">Нет интернета</string>
     <string name="put_serializable_key">note</string>
+    <string name="save">Сохранить</string>
+    <string name="stage_key">stage</string>
 </resources>

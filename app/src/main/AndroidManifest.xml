@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".utils.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="false">
-        <activity android:name=".presentation.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
-        <service android:name=".utils.SyncNotesService" />
+        <service android:name=".utils.NotesSynchronizer.SyncNotesService" />
     </application>
 
 </manifest>

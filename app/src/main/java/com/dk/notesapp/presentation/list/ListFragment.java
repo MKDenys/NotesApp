@@ -5,42 +5,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dk.notesapp.MainActivity;
 import com.dk.notesapp.R;
+import com.dk.notesapp.model.DataProvider;
 import com.dk.notesapp.model.Note;
-import com.dk.notesapp.presentation.MainActivity;
 import com.dk.notesapp.utils.InternetStatusChecker.InternetStatusChangeReceiver;
+import com.dk.notesapp.utils.NotesSynchronizer.NotesSynchronizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ListFragment extends Fragment implements ListView {
     private ListPresenter presenter;
-    private ProgressBar progressBar_circle;
-    private ProgressBar progressBar_horizontal;
-    private TextView textView;
+    private ProgressBar progressBarHorizontal;
     private RecyclerView recyclerView;
-    private NavController navController;
-    private MainActivity mainActivity;
     private LinearLayoutManager layoutManager;
     private NotesAdapter adapter;
-    private FloatingActionButton fab;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.detach();
+        super.onDestroy();
     }
 
     @Override
@@ -52,47 +53,20 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainActivity = (MainActivity) getActivity();
-        progressBar_circle = view.findViewById(R.id.progressBar_start);
-        progressBar_horizontal = view.findViewById(R.id.progressBar_sync);
-        textView = view.findViewById(R.id.textView_error);
+        progressBarHorizontal = view.findViewById(R.id.progressBar_sync);
         recyclerView = view.findViewById(R.id.recyclerView_notesList);
-        fab = view.findViewById(R.id.floatingActionButton_add_note);
+        FloatingActionButton fab = view.findViewById(R.id.floatingActionButton_add_note);
         fab.setOnClickListener(addNoteBtnClick);
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         layoutManager = new LinearLayoutManager(requireActivity());
-        presenter = new ListPresenter(this, InternetStatusChangeReceiver.getInstance(),
-                mainActivity, mainActivity);
-        adapter = new NotesAdapter(Collections.<Note>emptyList(), onItemClickListener);
         setupRecyclerView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.detach();
-    }
-
-    @Override
-    public void showLoadingStage() {
-        recyclerView.setVisibility(View.INVISIBLE);
-        textView.setVisibility(View.INVISIBLE);
-        progressBar_circle.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showErrorMessage(int errorMessage) {
-        recyclerView.setVisibility(View.INVISIBLE);
-        progressBar_circle.setVisibility(View.INVISIBLE);
-        textView.setVisibility(View.VISIBLE);
-        textView.setText(errorMessage);
+        DataProvider dataProvider = (MainActivity) getActivity();
+        NotesSynchronizer notesSynchronizer = (MainActivity) getActivity();
+        presenter = new ListPresenter(this, InternetStatusChangeReceiver.getInstance(),
+                dataProvider, notesSynchronizer);
     }
 
     @Override
     public void showNoteList(List<Note> notes) {
-        textView.setVisibility(View.INVISIBLE);
-        progressBar_circle.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
         adapter.setItems(notes);
     }
 
@@ -100,11 +74,38 @@ public class ListFragment extends Fragment implements ListView {
     public void showNoteDetail(Note note) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(getString(R.string.put_serializable_key), note);
-        navController.navigate(R.id.action_listFragment_to_detailFragment, bundle);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_listFragment_to_detailFragment, bundle);
+    }
+
+    @Override
+    public void updateList() {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void showSyncProcess() {
+        showProgressBar();
+    }
+
+    @Override
+    public void hideSyncProcess() {
+        hideProgressBar();
+    }
+
+    @Override
+    public void showError(int errorStringId) {
+        Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                errorStringId, Snackbar.LENGTH_LONG).show();
     }
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(layoutManager);
+        adapter = new NotesAdapter(Collections.<Note>emptyList(), onItemClickListener);
         recyclerView.setAdapter(adapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
     }
@@ -135,4 +136,13 @@ public class ListFragment extends Fragment implements ListView {
             presenter.noteSelected(adapter.getItem(position));
         }
     };
+
+    private void showProgressBar(){
+        progressBarHorizontal.setVisibility(View.VISIBLE);
+        progressBarHorizontal.setIndeterminate(true);
+    }
+
+    private void hideProgressBar(){
+        progressBarHorizontal.setVisibility(View.INVISIBLE);
+    }
 }

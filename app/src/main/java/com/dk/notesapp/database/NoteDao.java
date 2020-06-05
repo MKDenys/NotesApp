@@ -14,7 +14,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface NoteDao {
-    @Query("SELECT * FROM Note")
+    @Query("SELECT * FROM Note ORDER BY lastUpdateDate DESC")
     LiveData<List<Note>> getAll();
 
     @Insert(onConflict = REPLACE)

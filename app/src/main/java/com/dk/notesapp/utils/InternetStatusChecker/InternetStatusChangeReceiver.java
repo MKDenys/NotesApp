@@ -5,11 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.dk.notesapp.utils.App;
+import com.dk.notesapp.App;
 
 import java.util.LinkedList;
 import java.util.List;
-
 
 public class InternetStatusChangeReceiver extends BroadcastReceiver implements InternetStatusChangeObservable{
     private static InternetStatusChangeReceiver instance;
@@ -27,6 +26,7 @@ public class InternetStatusChangeReceiver extends BroadcastReceiver implements I
         return instance;
     }
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         internetConnectionStatus = App.getInstance().isInternetAvailable();
@@ -46,6 +46,6 @@ public class InternetStatusChangeReceiver extends BroadcastReceiver implements I
     @Override
     public void notifyObservers() {
         for (InternetStatusChangeObserver observer : observers)
-            observer.internetStatusWasUpdate(internetConnectionStatus);
+            observer.onUpdateInternetStatus(internetConnectionStatus);
     }
 }

@@ -1,5 +1,6 @@
 package com.dk.notesapp.presentation.list;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dk.notesapp.R;
 import com.dk.notesapp.model.Note;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -37,7 +40,12 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         final Note item = notes.get(position);
         itemViewHolder.title.setText(item.getTitle());
         itemViewHolder.description.setText(String.valueOf(item.getDescription()));
-        itemViewHolder.datetime.setText(String.valueOf(item.getLastUpdateDate()));
+        Date lastUpdateTime = item.getLastUpdateDate();
+        if (isToday(lastUpdateTime)) {
+            itemViewHolder.datetime.setText(DateFormat.format("hh:mm", lastUpdateTime));
+        } else {
+            itemViewHolder.datetime.setText(DateFormat.format("dd.MM.yyyy", lastUpdateTime));
+        }
     }
 
     @Override
@@ -54,9 +62,11 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         notifyDataSetChanged();
     }
 
-    public void removeItem(int position){
-        this.notes.remove(position);
-        notifyDataSetChanged();
+    private boolean isToday(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        Calendar today = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
     }
 
     private static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

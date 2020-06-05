@@ -1,8 +1,7 @@
-package com.dk.notesapp.network;
-
-import com.dk.notesapp.model.Note;
+package com.dk.notesapp.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RemoteRepository{
@@ -24,6 +23,7 @@ public class RemoteRepository{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //return Collections.emptyList();
         return notes;
     }
 }

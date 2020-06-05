@@ -1,4 +1,4 @@
-package com.dk.notesapp.utils;
+package com.dk.notesapp;
 
 import android.app.Application;
 import android.content.Context;
